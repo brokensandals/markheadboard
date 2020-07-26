@@ -1,4 +1,4 @@
-const HEADING_REGEXP = /^(##?)\s*(.*)$/mg;
+const HEADING_REGEXP = /^(##?) *(.*)$/mg;
 
 interface Section {
   start: number;
