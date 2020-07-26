@@ -10,14 +10,20 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:markheadboard.helloWorld"
+		"onCustomEditor:markheadboard.boardEditor"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"customEditors": [
 			{
-				"command": "markheadboard.helloWorld",
-				"title": "Hello World"
+				"viewType": "markheadboard.boardEditor",
+				"displayName": "Mark Headboard",
+				"selector": [
+					{
+						"filenamePattern": "*.md"
+					}
+				],
+				"priority": "option"
 			}
 		]
 	},
