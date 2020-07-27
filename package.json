@@ -11,6 +11,10 @@
 	"categories": [
 		"Other"
 	],
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/brokensandals/markheadboard.git"
+  },
 	"activationEvents": [
 		"onCommand:markheadboard.boardEditor.reopen",
 		"onCommand:markheadboard.boardEditor.openToSide",
