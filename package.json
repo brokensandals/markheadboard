@@ -1,83 +1,83 @@
 {
-	"name": "markheadboard",
-	"displayName": "Mark Headboard",
-	"description": "Edit a markdown file as a board with top-level headings shown as columns and second-level headings shown as cards.",
-	"version": "0.0.1",
-	"publisher": "brokensandals",
-	"license": "MIT",
-	"engines": {
-		"vscode": "^1.47.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"repository": {
+  "name": "markheadboard",
+  "displayName": "Mark Headboard",
+  "description": "Edit a markdown file as a board with top-level headings shown as columns and second-level headings shown as cards.",
+  "version": "0.0.1",
+  "publisher": "brokensandals",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.47.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "repository": {
     "type": "git",
     "url": "https://github.com/brokensandals/markheadboard.git"
   },
-	"activationEvents": [
-		"onCommand:markheadboard.boardEditor.reopen",
-		"onCommand:markheadboard.boardEditor.openToSide",
-		"onCustomEditor:markheadboard.boardEditor"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"category": "Mark Headboard",
-				"command": "markheadboard.boardEditor.reopen",
-				"title": "Reopen as Board"
-			},
-			{
-				"category": "Mark Headboard",
-				"command": "markheadboard.boardEditor.openToSide",
-				"title": "Open as Board to the Side"
-			}
-		],
-		"customEditors": [
-			{
-				"viewType": "markheadboard.boardEditor",
-				"displayName": "Mark Headboard",
-				"selector": [
-					{
-						"filenamePattern": "*.md"
-					}
-				],
-				"priority": "option"
-			}
-		],
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "markheadboard.boardEditor.reopen",
-					"when": "editorLangId == markdown"
-				},
-				{
-					"command": "markheadboard.boardEditor.openToSide",
-					"when": "editorLangId == markdown"
-				}
-			]
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.47.0",
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.11.0",
-		"eslint": "^6.8.0",
-		"@typescript-eslint/parser": "^2.30.0",
-		"@typescript-eslint/eslint-plugin": "^2.30.0",
-		"glob": "^7.1.6",
-		"mocha": "^7.1.2",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
-	}
+  "activationEvents": [
+    "onCommand:markheadboard.boardEditor.reopen",
+    "onCommand:markheadboard.boardEditor.openToSide",
+    "onCustomEditor:markheadboard.boardEditor"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "category": "Mark Headboard",
+        "command": "markheadboard.boardEditor.reopen",
+        "title": "Reopen as Board"
+      },
+      {
+        "category": "Mark Headboard",
+        "command": "markheadboard.boardEditor.openToSide",
+        "title": "Open as Board to the Side"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "markheadboard.boardEditor",
+        "displayName": "Mark Headboard",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ],
+        "priority": "option"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "markheadboard.boardEditor.reopen",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markheadboard.boardEditor.openToSide",
+          "when": "editorLangId == markdown"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.47.0",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "eslint": "^6.8.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "glob": "^7.1.6",
+    "mocha": "^7.1.2",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
+  }
 }
