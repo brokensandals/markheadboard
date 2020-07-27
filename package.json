@@ -14,6 +14,18 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"category": "Mark Headboard",
+				"command": "markheadboard.boardEditor.reopen",
+				"title": "Reopen as Board"
+			},
+			{
+				"category": "Mark Headboard",
+				"command": "markheadboard.boardEditor.openToSide",
+				"title": "Open as Board to the Side"
+			}
+		],
 		"customEditors": [
 			{
 				"viewType": "markheadboard.boardEditor",
@@ -25,7 +37,19 @@
 				],
 				"priority": "option"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "markheadboard.boardEditor.reopen",
+					"when": "editorLangId == markdown"
+				},
+				{
+					"command": "markheadboard.boardEditor.openToSide",
+					"when": "editorLangId == markdown"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
