@@ -10,6 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onCommand:markheadboard.boardEditor.reopen",
+		"onCommand:markheadboard.boardEditor.openToSide",
 		"onCustomEditor:markheadboard.boardEditor"
 	],
 	"main": "./out/extension.js",
