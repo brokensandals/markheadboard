@@ -3,6 +3,8 @@
 	"displayName": "Mark Headboard",
 	"description": "Edit a markdown file as a board with top-level headings shown as columns and second-level headings shown as cards.",
 	"version": "0.0.1",
+	"publisher": "brokensandals",
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.47.0"
 	},
