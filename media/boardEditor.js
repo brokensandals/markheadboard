@@ -1,5 +1,6 @@
 (function() {
   const vscode = acquireVsCodeApi();
+  let dragging = null;
 
   function handleSectionClick(event) {
     let target = event.target;
@@ -14,19 +15,41 @@
   }
 
   function handleDragStart(event) {
-    document.getElementById('columns').classList.add(`dragging-${event.target.tagName === 'SECTION' ? 'column' : 'card'}`);
+    if (event.target.classList.contains('card')) {
+      dragging = { type: 'card' };
+    } else if (event.target.classList.contains('column')) {
+      dragging = { type: 'column' };
+    } else {
+      dragging = null;
+      return;
+    }
+    dragging.start = parseInt(event.target.dataset.start);
+    dragging.heading = event.target.dataset.heading;
   }
 
   function handleDragEnd(event) {
-    document.getElementById('columns').classList.remove('dragging-column', 'dragging-card');
+    for (const el of document.getElementsByClassName('drag-over')) {
+      el.classList.remove('drag-over');
+    }
   }
 
   function handleDragEnter(event) {
-    ['.column', '.card'].map(s => event.target.closest(s)).filter(e => e !== null).forEach(e => e.classList.add('drag-over'));
+    switch (dragging.type) {
+      case 'card':
+        event.target.classList.add('drag-over');
+        break;
+      case 'column':
+        event.target.closest('.column').classList.add('drag-over');
+        break;
+    }
   }
 
   function handleDragLeave(event) {
     event.target.classList.remove('drag-over');
+  }
+
+  function handleDrop(event) {
+    
   }
 
   function addSectionListeners(element) {
