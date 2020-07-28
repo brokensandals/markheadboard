@@ -13,10 +13,17 @@
     });
   }
 
+  function updateCard(section, card) {
+    card.className = 'card';
+    card.innerText = section.heading || '[UNTITLED]';
+    card.dataset.start = section.start;
+    card.dataset.heading = section.heading;
+  }
+
   function updateColumn(section, column) {
+    column.className = 'column';
     column.dataset.start = section.start;
     column.dataset.heading = section.heading;
-    column.addEventListener('click', handleSectionClick);
 
     const columnHeadings = column.getElementsByClassName('column-name');
     let columnHeading;
@@ -44,18 +51,13 @@
     let index = 0;
 
     while (index < section.children.length && index < cards.length) {
-      cards[index].innerText = section.children[index].heading || '[UNTITLED]';
-      cards[index].dataset.start = section.children[index].start;
-      cards[index].dataset.heading = section.children[index].heading;
+      updateCard(section.children[index], cards[index]);
       index += 1;
     }
 
     while (index < section.children.length) {
       const card = document.createElement('li');
-      card.className = 'card';
-      card.innerText = section.children[index].heading || '[UNTITLED]';
-      card.dataset.start = section.children[index].start;
-      card.dataset.heading = section.children[index].heading;
+      updateCard(section.children[index], card);
       card.addEventListener('click', handleSectionClick);
       cardsContainer.appendChild(card);
       index += 1;
@@ -78,8 +80,8 @@
 
     while (index < root.children.length) {
       const column = document.createElement('section');
-      column.className = 'column';
       updateColumn(root.children[index], column);
+      column.addEventListener('click', handleSectionClick);
       columnsContainer.appendChild(column);
       index += 1;
     }
