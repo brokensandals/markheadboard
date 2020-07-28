@@ -13,17 +13,43 @@
     });
   }
 
+  function handleDragStart(event) {
+    document.getElementById('columns').classList.add(`dragging-${event.target.tagName === 'SECTION' ? 'column' : 'card'}`);
+  }
+
+  function handleDragEnd(event) {
+    document.getElementById('columns').classList.remove('dragging-column', 'dragging-card');
+  }
+
+  function handleDragEnter(event) {
+    ['.column', '.card'].map(s => event.target.closest(s)).filter(e => e !== null).forEach(e => e.classList.add('drag-over'));
+  }
+
+  function handleDragLeave(event) {
+    event.target.classList.remove('drag-over');
+  }
+
+  function addSectionListeners(element) {
+    element.addEventListener('click', handleSectionClick);
+    element.addEventListener('dragstart', handleDragStart);
+    element.addEventListener('dragend', handleDragEnd);
+    element.addEventListener('dragenter', handleDragEnter);
+    element.addEventListener('dragleave', handleDragLeave);
+  }
+
   function updateCard(section, card) {
     card.className = 'card';
     card.innerText = section.heading || '[UNTITLED]';
     card.dataset.start = section.start;
     card.dataset.heading = section.heading;
+    card.draggable = true;
   }
 
   function updateColumn(section, column) {
     column.className = 'column';
     column.dataset.start = section.start;
     column.dataset.heading = section.heading;
+    column.draggable = true;
 
     const columnHeadings = column.getElementsByClassName('column-name');
     let columnHeading;
@@ -32,6 +58,8 @@
     } else {
       columnHeading = document.createElement('h1');
       columnHeading.className = 'column-name';
+      columnHeading.addEventListener('dragenter', handleDragEnter);
+      columnHeading.addEventListener('dragleave', handleDragLeave);
       column.appendChild(columnHeading);
     }
     columnHeading.innerText = section.heading || '[UNTITLED]';
@@ -58,7 +86,7 @@
     while (index < section.children.length) {
       const card = document.createElement('li');
       updateCard(section.children[index], card);
-      card.addEventListener('click', handleSectionClick);
+      addSectionListeners(card);
       cardsContainer.appendChild(card);
       index += 1;
     }
@@ -81,7 +109,7 @@
     while (index < root.children.length) {
       const column = document.createElement('section');
       updateColumn(root.children[index], column);
-      column.addEventListener('click', handleSectionClick);
+      addSectionListeners(column);
       columnsContainer.appendChild(column);
       index += 1;
     }

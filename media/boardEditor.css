@@ -37,3 +37,13 @@
 .card:hover {
   background-color: cadetblue;
 }
+
+.dragging-column .column.drag-over {
+  border: 1px solid green;
+  padding: 9px;
+}
+
+.dragging-card .card.drag-over {
+  border: 1px solid green;
+  padding: 2px;
+}
