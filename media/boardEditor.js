@@ -34,14 +34,7 @@
   }
 
   function handleDragEnter(event) {
-    switch (dragging.type) {
-      case 'card':
-        event.target.classList.add('drag-over');
-        break;
-      case 'column':
-        event.target.closest('.column').classList.add('drag-over');
-        break;
-    }
+    event.target.closest(`.${dragging.type}`).classList.add('drag-over');
   }
 
   function handleDragLeave(event) {
