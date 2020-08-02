@@ -1,102 +1,58 @@
 (function() {
   const vscode = acquireVsCodeApi();
-  let dragging = null;
+  let root = null;
 
   function handleSectionClick(event) {
-    let target = event.target;
-    while (typeof target.dataset.start === 'undefined') {
-      target = target.parentElement;
-    }
-    vscode.postMessage({
-      type: 'open',
-      start: parseInt(target.dataset.start, 10),
-      heading: target.dataset.heading,
-    });
-  }
-
-  function handleDragStart(event) {
-    if (event.target.classList.contains('card')) {
-      dragging = { type: 'card' };
-    } else if (event.target.classList.contains('column')) {
-      dragging = { type: 'column' };
+    const columnSec = root.children[parseInt(event.target.closest('.column').dataset.index, 10)];
+    const message = { type: 'open' };
+    const card = event.target.closest('.card');
+    if (card) {
+      const cardSec = columnSec.children[parseInt(card.dataset.index, 10)];
+      message.start = cardSec.start;
+      message.heading = cardSec.heading;
     } else {
-      dragging = null;
-      return;
+      message.start = columnSec.start;
+      message.heading = columnSec.heading;
     }
-    dragging.start = parseInt(event.target.dataset.start, 10);
-    dragging.end = parseInt(event.target.dataset.end, 10);
-    dragging.heading = event.target.dataset.heading;
-    document.getElementById('columns').classList.add(`dragging-${dragging.type}`);
+    vscode.postMessage(message);
   }
 
-  function handleDragEnd(event) {
-    for (const el of document.getElementsByClassName('drag-over')) {
-      el.classList.remove('drag-over');
-    }
-    document.getElementById('columns').classList.remove('dragging-card', 'dragging-column');
-  }
-
-  function handleDragEnter(event) {
-    event.target.classList.add('drag-over');
-  }
-
-  function handleDragLeave(event) {
-    event.target.classList.remove('drag-over');
-  }
-
-  function handleDragOver(event) {
-    event.preventDefault();
-  }
-
-  function handleDrop(event) {
-    let dest = null;
-    if (dragging.type === 'card') {
-      if (event.target.classList.contains('card')) {
-        dest = parseInt(event.target.dataset.start, 10);
-      } else if (event.target.classList.contains('column')) {
-        dest = parseInt(event.target.dataset.end, 10);
+  function handleCardMove(event) {
+    const sourceColumnSec = root.children[parseInt(event.dragged.closest('.column').dataset.index, 10)];
+    const sourceCardSec = sourceColumnSec.children[parseInt(event.dragged.dataset.index, 10)];
+    const destColumnSec = root.children[parseInt(event.related.closest('.column').dataset.index, 10)];
+    const destCard = event.related.closest('.card');
+    const message = {
+      type: 'move',
+      sourceStart: sourceCardSec.start,
+      sourceEnd: sourceCardSec.end,
+    };
+    if (destCard) {
+      const destCardSec = destColumnSec.children[parseInt(destCard.dataset.index, 10)];
+      if (event.willInsertAfter) {
+        message.dest = destCardSec.end;
+      } else {
+        message.dest = destCardSec.start;
       }
-    } else if (dragging.type === 'column') {
-      if (event.target.classList.contains('column')) {
-        dest = parseInt(event.target.dataset.start, 10);
-      }
+    } else {
+      message.dest = destColumnSec.end;
     }
-    if (dest !== null && dest !== dragging.start) {
-      vscode.postMessage({
-        type: 'move',
-        sourceStart: dragging.start,
-        sourceEnd: dragging.end,
-        dest
-      });
-      event.stopPropagation();
-    }
+    vscode.postMessage(message);
   }
 
   function addSectionListeners(element) {
     element.addEventListener('click', handleSectionClick);
-    element.addEventListener('dragstart', handleDragStart);
-    element.addEventListener('dragend', handleDragEnd);
-    element.addEventListener('dragenter', handleDragEnter);
-    element.addEventListener('dragleave', handleDragLeave);
-    element.addEventListener('dragover', handleDragOver);
-    element.addEventListener('drop', handleDrop);
   }
 
   function updateCard(section, card) {
     card.className = 'card';
     card.innerText = section.heading || '[UNTITLED]';
-    card.dataset.start = section.start;
-    card.dataset.end = section.end;
-    card.dataset.heading = section.heading;
-    card.draggable = true;
+    card.dataset.index = section.index;
   }
 
   function updateColumn(section, column) {
     column.className = 'column';
-    column.dataset.start = section.start;
-    column.dataset.end = section.end;
-    column.dataset.heading = section.heading;
-    column.draggable = true;
+    column.dataset.index = section.index;
 
     const columnHeadings = column.getElementsByClassName('column-name');
     let columnHeading;
@@ -113,11 +69,15 @@
     let cardsContainer;
     if (cardsContainers.length) {
       cardsContainer = cardsContainers[0];
-    }
-    else {
+    } else {
       cardsContainer = document.createElement('ul');
       cardsContainer.className = 'cards';
       column.appendChild(cardsContainer);
+      new Sortable(cardsContainer, {
+        animation: 150,
+        group: 'cards',
+        onMove: handleCardMove,
+      });
     }
 
     const cards = cardsContainer.getElementsByClassName('card');
@@ -141,7 +101,7 @@
     }
   }
 
-  function updateColumns(root) {
+  function updateColumns() {
     const columnsContainer = document.getElementById('columns');
     const columns = columnsContainer.getElementsByClassName('column');
     let index = 0;
@@ -168,7 +128,7 @@
     const message = event.data;
     switch (message.type) {
       case 'refresh':
-        const { root } = message;
+        root = message.root;
         updateColumns(root);
         vscode.setState({ root });
         break;
@@ -177,6 +137,7 @@
 
   const state = vscode.getState();
   if (state) {
-    updateColumns(state.root);
+    root = state.root;
+    updateColumns();
   }
 }());

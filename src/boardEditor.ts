@@ -103,6 +103,7 @@ export class BoardEditorProvider implements vscode.CustomTextEditorProvider {
 </head>
 <body>
 <div id="columns" />
+<script nonce="${nonce}" src="${webviewPanel.webview.asWebviewUri(vscode.Uri.file(path.join(this.context.extensionPath, 'media', 'Sortable.min.js')))}"></script>
 <script nonce="${nonce}" src="${webviewPanel.webview.asWebviewUri(vscode.Uri.file(path.join(this.context.extensionPath, 'media', 'boardEditor.js')))}"></script>
 </body>
 </html>`;
