@@ -74,6 +74,21 @@ export class BoardEditorProvider implements vscode.CustomTextEditorProvider {
             }
           });
           break;
+        case 'move':
+          if (typeof message.sourceStart === 'undefined' || typeof message.sourceEnd === 'undefined' || typeof message.dest === 'undefined') {
+            // Should only get here in the case of a bug.
+            return;
+          }
+          const edit = new vscode.WorkspaceEdit();
+          const sourceStart = document.positionAt(message.sourceStart);
+          const sourceEnd = document.positionAt(message.sourceEnd);
+          const sourceRange = new vscode.Range(sourceStart, sourceEnd);
+          const sourceText = document.getText(sourceRange);
+          const dest = document.positionAt(message.dest);
+          edit.insert(document.uri, dest, sourceText);
+          edit.delete(document.uri, sourceRange);
+          vscode.workspace.applyEdit(edit);
+          break;
       }
     });
 

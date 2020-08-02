@@ -23,7 +23,8 @@
       dragging = null;
       return;
     }
-    dragging.start = parseInt(event.target.dataset.start);
+    dragging.start = parseInt(event.target.dataset.start, 10);
+    dragging.end = parseInt(event.target.dataset.end, 10);
     dragging.heading = event.target.dataset.heading;
     document.getElementById('columns').classList.add(`dragging-${dragging.type}`);
   }
@@ -43,8 +44,32 @@
     event.target.classList.remove('drag-over');
   }
 
+  function handleDragOver(event) {
+    event.preventDefault();
+  }
+
   function handleDrop(event) {
-    
+    let dest = null;
+    if (dragging.type === 'card') {
+      if (event.target.classList.contains('card')) {
+        dest = parseInt(event.target.dataset.start, 10);
+      } else if (event.target.classList.contains('column')) {
+        dest = parseInt(event.target.dataset.end, 10);
+      }
+    } else if (dragging.type === 'column') {
+      if (event.target.classList.contains('column')) {
+        dest = parseInt(event.target.dataset.start, 10);
+      }
+    }
+    if (dest !== null && dest !== dragging.start) {
+      vscode.postMessage({
+        type: 'move',
+        sourceStart: dragging.start,
+        sourceEnd: dragging.end,
+        dest
+      });
+      event.stopPropagation();
+    }
   }
 
   function addSectionListeners(element) {
@@ -53,12 +78,15 @@
     element.addEventListener('dragend', handleDragEnd);
     element.addEventListener('dragenter', handleDragEnter);
     element.addEventListener('dragleave', handleDragLeave);
+    element.addEventListener('dragover', handleDragOver);
+    element.addEventListener('drop', handleDrop);
   }
 
   function updateCard(section, card) {
     card.className = 'card';
     card.innerText = section.heading || '[UNTITLED]';
     card.dataset.start = section.start;
+    card.dataset.end = section.end;
     card.dataset.heading = section.heading;
     card.draggable = true;
   }
@@ -66,6 +94,7 @@
   function updateColumn(section, column) {
     column.className = 'column';
     column.dataset.start = section.start;
+    column.dataset.end = section.end;
     column.dataset.heading = section.heading;
     column.draggable = true;
 
