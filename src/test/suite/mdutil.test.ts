@@ -15,6 +15,8 @@ suite('mdutil', () => {
 
 some text
 
+### sub-heading that should be ignored
+
 ## Card 1.3
 
 more

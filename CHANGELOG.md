@@ -1,8 +1,9 @@
 # Change Log
 
-All notable changes to the "markheadboard" extension will be documented in this file.
+## Unreleased
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Bugfixes
+  -  Headings of level 3 or more should not be treated as cards, lines with no space after the `#` or `##` should not be treated as headings.
 
 ## 0.0.1
 
