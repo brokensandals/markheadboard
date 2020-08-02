@@ -31,23 +31,29 @@ text
 foo bar baz`;
       const expected = {
         start: 0,
+        end: doc.length,
+        index: 0,
         heading: '',
         children: [
           {
             start: 0,
+            end: doc.indexOf('# Second List'),
+            index: 0,
             heading: 'First List',
             children: [
-              { start: doc.indexOf('## Card 1.1'), heading: 'Card 1.1', children: [] },
-              { start: doc.indexOf('## Card 1.2'), heading: 'Card 1.2', children: [] },
-              { start: doc.indexOf('## Card 1.3'), heading: 'Card 1.3', children: [] },
+              { start: doc.indexOf('## Card 1.1'), end: doc.indexOf('## Card 1.2'), index: 0, heading: 'Card 1.1', children: [] },
+              { start: doc.indexOf('## Card 1.2'), end: doc.indexOf('## Card 1.3'), index: 1, heading: 'Card 1.2', children: [] },
+              { start: doc.indexOf('## Card 1.3'), end: doc.indexOf('# Second List'), index: 2, heading: 'Card 1.3', children: [] },
             ],
           },
-          { start: doc.indexOf('# Second List'), heading: 'Second List', children: [] },
+          { start: doc.indexOf('# Second List'), end: doc.indexOf('# Third List'), index: 1, heading: 'Second List', children: [] },
           {
             start: doc.indexOf('# Third List'),
+            end: doc.length,
+            index: 2,
             heading: 'Third List',
             children: [
-              { start: doc.indexOf('## Card 3.1'), heading: 'Card 3.1', children: [] },
+              { start: doc.indexOf('## Card 3.1'), end: doc.length, index: 0, heading: 'Card 3.1', children: [] },
             ],
           },
         ],

@@ -1,29 +1,72 @@
 (function() {
   const vscode = acquireVsCodeApi();
+  let root = null;
 
   function handleSectionClick(event) {
-    let target = event.target;
-    while (typeof target.dataset.start === 'undefined') {
-      target = target.parentElement;
+    const columnSec = root.children[parseInt(event.target.closest('.column').dataset.index, 10)];
+    const message = { type: 'open' };
+    const card = event.target.closest('.card');
+    if (card) {
+      const cardSec = columnSec.children[parseInt(card.dataset.index, 10)];
+      message.start = cardSec.start;
+      message.heading = cardSec.heading;
+    } else {
+      message.start = columnSec.start;
+      message.heading = columnSec.heading;
     }
-    vscode.postMessage({
-      type: 'open',
-      start: parseInt(target.dataset.start, 10),
-      heading: target.dataset.heading,
-    });
+    vscode.postMessage(message);
+  }
+
+  function handleColumnSort(event) {
+    console.log(event);
+    const sourceColumnSec = root.children[event.oldDraggableIndex];
+    const message = {
+      type: 'move',
+      sourceStart: sourceColumnSec.start,
+      sourceEnd: sourceColumnSec.end,
+    };
+    const replaceIndex = (event.oldDraggableIndex < event.newDraggableIndex) ? event.newDraggableIndex + 1 : event.newDraggableIndex;
+    if (replaceIndex < root.children.length) {
+      message.dest = root.children[replaceIndex].start;
+    } else {
+      message.dest = root.end;
+    }
+    vscode.postMessage(message);
+    window.setTimeout(updateColumns, 100); // if the change doesn't get saved, reset everything to previous state
+  }
+
+  function handleCardSort(event) {
+    const sourceColumnSec = root.children[parseInt(event.from.closest('.column').dataset.index, 10)];
+    const sourceCardSec = sourceColumnSec.children[event.oldDraggableIndex];
+    const destColumnSec = root.children[parseInt(event.to.closest('.column').dataset.index, 10)];
+    const message = {
+      type: 'move',
+      sourceStart: sourceCardSec.start,
+      sourceEnd: sourceCardSec.end,
+    };
+    const replaceIndex = (event.from === event.to && event.oldDraggableIndex < event.newDraggableIndex) ? event.newDraggableIndex + 1 : event.newDraggableIndex;
+    if (replaceIndex < destColumnSec.children.length) {
+      message.dest = destColumnSec.children[replaceIndex].start;
+    } else {
+      message.dest = destColumnSec.end;
+    }
+    vscode.postMessage(message);
+    window.setTimeout(updateColumns, 100); // if the change doesn't get saved, reset everything to previous state
+  }
+
+  function addSectionListeners(element) {
+    element.addEventListener('click', handleSectionClick);
   }
 
   function updateCard(section, card) {
     card.className = 'card';
     card.innerText = section.heading || '[UNTITLED]';
-    card.dataset.start = section.start;
-    card.dataset.heading = section.heading;
+    card.dataset.index = section.index;
   }
 
   function updateColumn(section, column) {
     column.className = 'column';
-    column.dataset.start = section.start;
-    column.dataset.heading = section.heading;
+    column.dataset.index = section.index;
 
     const columnHeadings = column.getElementsByClassName('column-name');
     let columnHeading;
@@ -40,11 +83,15 @@
     let cardsContainer;
     if (cardsContainers.length) {
       cardsContainer = cardsContainers[0];
-    }
-    else {
+    } else {
       cardsContainer = document.createElement('ul');
       cardsContainer.className = 'cards';
       column.appendChild(cardsContainer);
+      new Sortable(cardsContainer, {
+        animation: 150,
+        group: 'cards',
+        onSort: handleCardSort,
+      });
     }
 
     const cards = cardsContainer.getElementsByClassName('card');
@@ -58,7 +105,7 @@
     while (index < section.children.length) {
       const card = document.createElement('li');
       updateCard(section.children[index], card);
-      card.addEventListener('click', handleSectionClick);
+      addSectionListeners(card);
       cardsContainer.appendChild(card);
       index += 1;
     }
@@ -68,7 +115,7 @@
     }
   }
 
-  function updateColumns(root) {
+  function updateColumns() {
     const columnsContainer = document.getElementById('columns');
     const columns = columnsContainer.getElementsByClassName('column');
     let index = 0;
@@ -81,7 +128,7 @@
     while (index < root.children.length) {
       const column = document.createElement('section');
       updateColumn(root.children[index], column);
-      column.addEventListener('click', handleSectionClick);
+      addSectionListeners(column);
       columnsContainer.appendChild(column);
       index += 1;
     }
@@ -95,15 +142,21 @@
     const message = event.data;
     switch (message.type) {
       case 'refresh':
-        const { root } = message;
+        root = message.root;
         updateColumns(root);
         vscode.setState({ root });
         break;
     }
   });
 
+  new Sortable(document.getElementById('columns'), {
+    animation: 150,
+    onSort: handleColumnSort,
+  });
+
   const state = vscode.getState();
   if (state) {
-    updateColumns(state.root);
+    root = state.root;
+    updateColumns();
   }
 }());
