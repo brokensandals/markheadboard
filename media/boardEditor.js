@@ -17,23 +17,18 @@
     vscode.postMessage(message);
   }
 
-  function handleCardMove(event) {
-    const sourceColumnSec = root.children[parseInt(event.dragged.closest('.column').dataset.index, 10)];
-    const sourceCardSec = sourceColumnSec.children[parseInt(event.dragged.dataset.index, 10)];
-    const destColumnSec = root.children[parseInt(event.related.closest('.column').dataset.index, 10)];
-    const destCard = event.related.closest('.card');
+  function handleCardSort(event) {
+    const sourceColumnSec = root.children[parseInt(event.from.closest('.column').dataset.index, 10)];
+    const sourceCardSec = sourceColumnSec.children[event.oldDraggableIndex];
+    const destColumnSec = root.children[parseInt(event.to.closest('.column').dataset.index, 10)];
     const message = {
       type: 'move',
       sourceStart: sourceCardSec.start,
       sourceEnd: sourceCardSec.end,
     };
-    if (destCard) {
-      const destCardSec = destColumnSec.children[parseInt(destCard.dataset.index, 10)];
-      if (event.willInsertAfter) {
-        message.dest = destCardSec.end;
-      } else {
-        message.dest = destCardSec.start;
-      }
+    const replaceIndex = (event.from === event.to && event.oldDraggableIndex < event.newDraggableIndex) ? event.newDraggableIndex + 1 : event.newDraggableIndex;
+    if (replaceIndex < destColumnSec.children.length) {
+      message.dest = destColumnSec.children[replaceIndex].start;
     } else {
       message.dest = destColumnSec.end;
     }
@@ -76,7 +71,7 @@
       new Sortable(cardsContainer, {
         animation: 150,
         group: 'cards',
-        onMove: handleCardMove,
+        onSort: handleCardSort,
       });
     }
 
