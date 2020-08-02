@@ -2,7 +2,7 @@
   "name": "markheadboard",
   "displayName": "Mark Headboard",
   "description": "Edit a markdown file as a board with top-level headings shown as columns and second-level headings shown as cards.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "brokensandals",
   "license": "MIT",
   "engines": {
