@@ -38,6 +38,14 @@
   background-color: cadetblue;
 }
 
+.dragging-column .column * {
+  pointer-events: none;
+}
+
+.dragging-card .card * {
+  pointer-events: none;
+}
+
 .column.drag-over {
   border: 1px solid green;
   padding: 9px;

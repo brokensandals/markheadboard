@@ -25,19 +25,18 @@
     }
     dragging.start = parseInt(event.target.dataset.start);
     dragging.heading = event.target.dataset.heading;
+    document.getElementById('columns').classList.add(`dragging-${dragging.type}`);
   }
 
   function handleDragEnd(event) {
     for (const el of document.getElementsByClassName('drag-over')) {
       el.classList.remove('drag-over');
     }
+    document.getElementById('columns').classList.remove('dragging-card', 'dragging-column');
   }
 
   function handleDragEnter(event) {
-    const column = event.target.closest(`.${dragging.type}`);
-    if (column) {
-      column.classList.add('drag-over');
-    }
+    event.target.classList.add('drag-over');
   }
 
   function handleDragLeave(event) {
