@@ -3,7 +3,7 @@
 Provides a kanban-board-like view for Markdown files.
 Each level 1 heading is a column on the board, and each level 2 heading is a card in the column.
 
-![screenshot](docs/screenshot.png)
+![demo](docs/demo.gif)
 
 Features:
 
