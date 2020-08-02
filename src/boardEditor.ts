@@ -102,7 +102,7 @@ export class BoardEditorProvider implements vscode.CustomTextEditorProvider {
   <title>Mark Headboard</title>
 </head>
 <body>
-<div id="columns" />
+<div id="columns"></div>
 <script nonce="${nonce}" src="${webviewPanel.webview.asWebviewUri(vscode.Uri.file(path.join(this.context.extensionPath, 'media', 'Sortable.min.js')))}"></script>
 <script nonce="${nonce}" src="${webviewPanel.webview.asWebviewUri(vscode.Uri.file(path.join(this.context.extensionPath, 'media', 'boardEditor.js')))}"></script>
 </body>

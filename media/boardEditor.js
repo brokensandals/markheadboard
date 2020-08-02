@@ -17,6 +17,23 @@
     vscode.postMessage(message);
   }
 
+  function handleColumnSort(event) {
+    console.log(event);
+    const sourceColumnSec = root.children[event.oldDraggableIndex];
+    const message = {
+      type: 'move',
+      sourceStart: sourceColumnSec.start,
+      sourceEnd: sourceColumnSec.end,
+    };
+    const replaceIndex = (event.oldDraggableIndex < event.newDraggableIndex) ? event.newDraggableIndex + 1 : event.newDraggableIndex;
+    if (replaceIndex < root.children.length) {
+      message.dest = root.children[replaceIndex].start;
+    } else {
+      message.dest = root.end;
+    }
+    vscode.postMessage(message);
+  }
+
   function handleCardSort(event) {
     const sourceColumnSec = root.children[parseInt(event.from.closest('.column').dataset.index, 10)];
     const sourceCardSec = sourceColumnSec.children[event.oldDraggableIndex];
@@ -128,6 +145,11 @@
         vscode.setState({ root });
         break;
     }
+  });
+
+  new Sortable(document.getElementById('columns'), {
+    animation: 150,
+    onSort: handleColumnSort,
   });
 
   const state = vscode.getState();
