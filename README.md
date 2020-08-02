@@ -5,12 +5,9 @@ Each level 1 heading is a column on the board, and each level 2 heading is a car
 
 ![screenshot](docs/screenshot.png)
 
-Current features (...ok, feature):
+Features:
 
 - clicking a card will take you to that section in the text editor
-
-Planned feature (my ambitions do not presently exceed beyond this one):
-
 - drag & drop cards or columns to rearrange sections in the document
 
 ## Usage
