@@ -19,7 +19,7 @@
 .cards {
   list-style-type: none;
   max-height: 75vh;
-  min-height: 100%;
+  height: 100%;
   overflow-y: scroll;
   padding: 0;
 }
