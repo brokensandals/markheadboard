@@ -32,6 +32,7 @@
       message.dest = root.end;
     }
     vscode.postMessage(message);
+    window.setTimeout(updateColumns, 100); // if the change doesn't get saved, reset everything to previous state
   }
 
   function handleCardSort(event) {
@@ -50,6 +51,7 @@
       message.dest = destColumnSec.end;
     }
     vscode.postMessage(message);
+    window.setTimeout(updateColumns, 100); // if the change doesn't get saved, reset everything to previous state
   }
 
   function addSectionListeners(element) {
