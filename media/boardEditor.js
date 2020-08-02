@@ -34,7 +34,10 @@
   }
 
   function handleDragEnter(event) {
-    event.target.closest(`.${dragging.type}`).classList.add('drag-over');
+    const column = event.target.closest(`.${dragging.type}`);
+    if (column) {
+      column.classList.add('drag-over');
+    }
   }
 
   function handleDragLeave(event) {
@@ -74,8 +77,6 @@
     } else {
       columnHeading = document.createElement('h1');
       columnHeading.className = 'column-name';
-      columnHeading.addEventListener('dragenter', handleDragEnter);
-      columnHeading.addEventListener('dragleave', handleDragLeave);
       column.appendChild(columnHeading);
     }
     columnHeading.innerText = section.heading || '[UNTITLED]';
