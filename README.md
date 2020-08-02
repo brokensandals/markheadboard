@@ -24,3 +24,5 @@ Or, you can use `Reopen Editor With`.
 Markdown parsing is primitive and done via regex.
 Most notably, it doesn't yet know to ignore fenced code blocks when scanning for headings.
 Also, only atx-style headers (`#` and `##`) are supported, not setext-style headers.
+
+Moving the last column to the front does not work correctly if there is no trailing newline.

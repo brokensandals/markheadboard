@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 1.0.0
 
 - Additions
   - You can now drag cards or columns around to rearrange them (the Markdown document will be updated).
