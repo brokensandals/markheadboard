@@ -10,30 +10,48 @@
   cursor: default;
   max-width: 200px;
   margin-right: 8px;
+  margin-top: 10px;
   min-width: 200px;
   padding: 10px;
   width: 200px;
 }
 
-.column:hover {
-  background-color: indigo;
-}
-
 .cards {
   list-style-type: none;
   max-height: 75vh;
+  min-height: 100%;
   overflow-y: scroll;
   padding: 0;
 }
 
 .card {
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: default;
   margin-bottom: 8px;
-  padding: 3px;
-  width: 175px;
+  padding: 6px;
+  width: 170px;
 }
 
-.card:hover {
-  background-color: cadetblue;
+.vscode-light .column {
+  background-color: #f4f4f4;
+}
+
+.vscode-light .card {
+  background-color: #e8e8e8;
+}
+
+.vscode-dark .column {
+  background-color: #2c2c2c;
+}
+
+.vscode-dark .card {
+  background-color: #3d3d3d;
+}
+
+.vscode-high-contrast .column {
+  border: 1px solid orange;
+}
+
+.vscode-high-contrast .card {
+  border: 1px solid blue;
 }
