@@ -26,7 +26,7 @@ text
 
 # Third List
 
-## Card 3.1
+## [Card 3.1 has a link](http://example.com/foo/bar)
 
 foo bar baz`;
       const expected = {
@@ -53,7 +53,7 @@ foo bar baz`;
             index: 2,
             heading: 'Third List',
             children: [
-              { start: doc.indexOf('## Card 3.1'), end: doc.length, index: 0, heading: 'Card 3.1', children: [] },
+              { start: doc.indexOf('## [Card 3.1'), end: doc.length, index: 0, heading: 'Card 3.1 has a link', link: 'http://example.com/foo/bar', children: [] },
             ],
           },
         ],

@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.0
+
+- Additions
+  - If a column or card title contains links (in the `[title](href)` syntax), command-clicking it instead opens the first link.
+
 ## 1.0.0
 
 - Additions

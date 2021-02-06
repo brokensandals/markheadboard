@@ -32,6 +32,10 @@
   width: 170px;
 }
 
+.has-link::before {
+  content: '🔗 ';
+}
+
 .vscode-light .column {
   background-color: #f4f4f4;
 }

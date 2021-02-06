@@ -10,11 +10,17 @@
       const cardSec = columnSec.children[parseInt(card.dataset.index, 10)];
       message.start = cardSec.start;
       message.heading = cardSec.heading;
+      message.link = cardSec.link;
     } else {
       message.start = columnSec.start;
       message.heading = columnSec.heading;
+      message.link = columnSec.link;
+    }
+    if (event.metaKey && message.link) {
+      message.type = 'openLink';
     }
     vscode.postMessage(message);
+    event.stopPropagation();
   }
 
   function handleColumnSort(event) {
@@ -60,6 +66,12 @@
 
   function updateCard(section, card) {
     card.className = 'card';
+    if (section.link) {
+      card.className += ' has-link';
+      card.title = 'meta+click to open ' + section.link;
+    } else {
+      card.title = '';
+    }
     card.innerText = section.heading || '[UNTITLED]';
     card.dataset.index = section.index;
   }
@@ -75,6 +87,12 @@
     } else {
       columnHeading = document.createElement('h1');
       columnHeading.className = 'column-name';
+      if (section.link) {
+        columnHeading.className += ' has-link';
+        columnHeading.title = 'meta+click to open ' + section.link;
+      } else {
+        columnHeading.title = '';
+      }
       column.appendChild(columnHeading);
     }
     columnHeading.innerText = section.heading || '[UNTITLED]';

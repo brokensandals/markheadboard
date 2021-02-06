@@ -74,6 +74,13 @@ export class BoardEditorProvider implements vscode.CustomTextEditorProvider {
             }
           });
           break;
+        case 'openLink':
+          if (typeof message.link === 'undefined') {
+            // Should only get here in the case of a bug.
+            return;
+          }
+          vscode.env.openExternal(vscode.Uri.parse(message.link));
+          break;
         case 'move':
           if (typeof message.sourceStart === 'undefined' || typeof message.sourceEnd === 'undefined' || typeof message.dest === 'undefined') {
             // Should only get here in the case of a bug.

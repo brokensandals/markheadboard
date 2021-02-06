@@ -8,6 +8,7 @@ Each level 1 heading is a column on the board, and each level 2 heading is a car
 Features:
 
 - clicking a card will take you to that section in the text editor
+  - if a column or card title contains links (in the `[title](href)` syntax), command-clicking it instead opens the first link
 - drag & drop cards or columns to rearrange sections in the document
 
 ## Usage
