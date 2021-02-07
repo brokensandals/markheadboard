@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0
+
+- Changes
+  - When command-clicking a column/card to open a link, previously it was always opened externally; now only http/https and mailto URIs are opened externally, and all other links are opened in editor tabs.
+- Bugfixes
+  - Adding or editing a link on a level 3 heading was previously not being reflected on the board unless you refreshed.
+
 ## 1.1.0
 
 - Additions

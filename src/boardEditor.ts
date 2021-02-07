@@ -1,7 +1,20 @@
 import * as crypto from 'crypto';
 import * as path from 'path';
+import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
 import * as mdutil from './mdutil';
+
+function shouldOpenExternally(href: string) {
+  return href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:');
+}
+
+function pathToUri(href: string, relativeToDir: string): vscode.Uri {
+  href = href.split('#', 2)[0].split('?', 2)[0]; // remove query string or fragment
+  if (!(href.startsWith('/'))) {
+    href = relativeToDir + '/' + href;
+  }
+  return vscode.Uri.parse('file://' + href);
+}
 
 // This doesn't really do what I want - it only looks at _visible_ editors, I'd like to find any
 // _open_ editor - but there doesn't seem to be a good way to do that: https://github.com/microsoft/vscode/issues/15178
@@ -79,7 +92,13 @@ export class BoardEditorProvider implements vscode.CustomTextEditorProvider {
             // Should only get here in the case of a bug.
             return;
           }
-          vscode.env.openExternal(vscode.Uri.parse(message.link));
+          if (shouldOpenExternally(message.link)) {
+            vscode.env.openExternal(vscode.Uri.parse(message.link));
+          } else {
+            const parts = document.uri.path.split('/');
+            const parDir = parts.slice(0, parts.length-1).join('/');
+            vscode.window.showTextDocument(pathToUri(message.link, parDir));
+          }
           break;
         case 'move':
           if (typeof message.sourceStart === 'undefined' || typeof message.sourceEnd === 'undefined' || typeof message.dest === 'undefined') {
