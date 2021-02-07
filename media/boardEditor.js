@@ -86,14 +86,14 @@
       columnHeading = columnHeadings[0];
     } else {
       columnHeading = document.createElement('h1');
-      columnHeading.className = 'column-name';
-      if (section.link) {
-        columnHeading.className += ' has-link';
-        columnHeading.title = 'meta+click to open ' + section.link;
-      } else {
-        columnHeading.title = '';
-      }
       column.appendChild(columnHeading);
+    }
+    columnHeading.className = 'column-name';
+    if (section.link) {
+      columnHeading.className += ' has-link';
+      columnHeading.title = 'meta+click to open ' + section.link;
+    } else {
+      columnHeading.title = '';
     }
     columnHeading.innerText = section.heading || '[UNTITLED]';
 
